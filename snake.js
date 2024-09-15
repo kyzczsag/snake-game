@@ -5,6 +5,10 @@ const grid = 16;
 let count = 0;
 let score = 0;
 
+// Obliczanie liczby jednostek siatki w poziomie i pionie
+const maxGridUnitsX = canvas.width / grid;
+const maxGridUnitsY = canvas.height / grid;
+
 let snake = {
     x: 160,
     y: 160,
@@ -15,8 +19,8 @@ let snake = {
 };
 
 let apple = {
-    x: getRandomInt(0, Math.floor(canvas.width / grid)) * grid,
-    y: getRandomInt(0, Math.floor(canvas.height / grid)) * grid
+    x: getRandomInt(0, maxGridUnitsX) * grid,
+    y: getRandomInt(0, maxGridUnitsY) * grid
 };
 
 // Ładowanie dźwięków
@@ -32,14 +36,14 @@ function getRandomInt(min, max) {
 function resetGame() {
     snake.x = 160;
     snake.y = 160;
-    snake.cells = [];
-    snake.maxCells = 4;
     snake.dx = grid;
     snake.dy = 0;
+    snake.cells = [];
+    snake.maxCells = 4;
     score = 0;
     document.getElementById('score').innerHTML = 'Wynik: ' + score;
-    apple.x = getRandomInt(0, Math.floor(canvas.width / grid)) * grid;
-    apple.y = getRandomInt(0, Math.floor(canvas.height / grid)) * grid;
+    apple.x = getRandomInt(0, maxGridUnitsX) * grid;
+    apple.y = getRandomInt(0, maxGridUnitsY) * grid;
     document.getElementById('message').innerHTML = '';
     document.getElementById('restartButton').style.display = 'none';
     requestAnimationFrame(loop);
@@ -59,6 +63,10 @@ function loop() {
     // Poruszanie się węża
     snake.x += snake.dx;
     snake.y += snake.dy;
+
+    // Upewnij się, że pozycje są liczbami całkowitymi
+    snake.x = Math.round(snake.x);
+    snake.y = Math.round(snake.y);
 
     // Przejście przez krawędzie ekranu
     if (snake.x < 0) {
@@ -99,8 +107,8 @@ function loop() {
             eatSound.play();
 
             // Umieszczenie jabłka w nowym miejscu
-            apple.x = getRandomInt(0, Math.floor(canvas.width / grid)) * grid;
-            apple.y = getRandomInt(0, Math.floor(canvas.height / grid)) * grid;
+            apple.x = getRandomInt(0, maxGridUnitsX) * grid;
+            apple.y = getRandomInt(0, maxGridUnitsY) * grid;
         }
 
         // Sprawdzenie kolizji z samym sobą
