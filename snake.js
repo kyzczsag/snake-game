@@ -15,8 +15,8 @@ let snake = {
 };
 
 let apple = {
-    x: getRandomInt(0, canvas.width / grid) * grid,
-    y: getRandomInt(0, canvas.height / grid) * grid
+    x: getRandomInt(0, Math.floor(canvas.width / grid)) * grid,
+    y: getRandomInt(0, Math.floor(canvas.height / grid)) * grid
 };
 
 // Ładowanie dźwięków
@@ -38,8 +38,8 @@ function resetGame() {
     snake.dy = 0;
     score = 0;
     document.getElementById('score').innerHTML = 'Wynik: ' + score;
-    apple.x = getRandomInt(0, canvas.width / grid) * grid;
-    apple.y = getRandomInt(0, canvas.height / grid) * grid;
+    apple.x = getRandomInt(0, Math.floor(canvas.width / grid)) * grid;
+    apple.y = getRandomInt(0, Math.floor(canvas.height / grid)) * grid;
     document.getElementById('message').innerHTML = '';
     document.getElementById('restartButton').style.display = 'none';
     requestAnimationFrame(loop);
@@ -99,8 +99,8 @@ function loop() {
             eatSound.play();
 
             // Umieszczenie jabłka w nowym miejscu
-            apple.x = getRandomInt(0, canvas.width / grid) * grid;
-            apple.y = getRandomInt(0, canvas.height / grid) * grid;
+            apple.x = getRandomInt(0, Math.floor(canvas.width / grid)) * grid;
+            apple.y = getRandomInt(0, Math.floor(canvas.height / grid)) * grid;
         }
 
         // Sprawdzenie kolizji z samym sobą
