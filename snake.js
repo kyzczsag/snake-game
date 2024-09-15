@@ -1,17 +1,13 @@
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
-// Dostosowanie rozmiaru canvas do ekranu iPhone 12
-canvas.width = Math.min(window.innerWidth, 390); // Szerokość ekranu iPhone 12 w pikselach CSS
-canvas.height = canvas.width; // Ustawiamy wysokość równą szerokości dla kwadratowego pola gry
-
-let grid = canvas.width / 25; // Skalowanie siatki w zależności od rozmiaru canvas
+const grid = 16;
 let count = 0;
 let score = 0;
 
 let snake = {
-    x: canvas.width / 2,
-    y: canvas.height / 2,
+    x: 160,
+    y: 160,
     dx: grid, // kierunek poziomy
     dy: 0,    // kierunek pionowy
     cells: [], // segmenty węża
@@ -19,8 +15,8 @@ let snake = {
 };
 
 let apple = {
-    x: getRandomInt(0, 25) * grid,
-    y: getRandomInt(0, 25) * grid
+    x: getRandomInt(0, canvas.width / grid) * grid,
+    y: getRandomInt(0, canvas.height / grid) * grid
 };
 
 // Ładowanie dźwięków
@@ -34,16 +30,16 @@ function getRandomInt(min, max) {
 
 // Funkcja resetująca grę
 function resetGame() {
-    snake.x = canvas.width / 2;
-    snake.y = canvas.height / 2;
+    snake.x = 160;
+    snake.y = 160;
     snake.cells = [];
     snake.maxCells = 4;
     snake.dx = grid;
     snake.dy = 0;
     score = 0;
     document.getElementById('score').innerHTML = 'Wynik: ' + score;
-    apple.x = getRandomInt(0, 25) * grid;
-    apple.y = getRandomInt(0, 25) * grid;
+    apple.x = getRandomInt(0, canvas.width / grid) * grid;
+    apple.y = getRandomInt(0, canvas.height / grid) * grid;
     document.getElementById('message').innerHTML = '';
     document.getElementById('restartButton').style.display = 'none';
     requestAnimationFrame(loop);
@@ -101,8 +97,10 @@ function loop() {
             document.getElementById('score').innerHTML = 'Wynik: ' + score;
             // Odtwarzanie dźwięku zjedzenia
             eatSound.play();
-            apple.x = getRandomInt(0, 25) * grid;
-            apple.y = getRandomInt(0, 25) * grid;
+
+            // Umieszczenie jabłka w nowym miejscu
+            apple.x = getRandomInt(0, canvas.width / grid) * grid;
+            apple.y = getRandomInt(0, canvas.height / grid) * grid;
         }
 
         // Sprawdzenie kolizji z samym sobą
