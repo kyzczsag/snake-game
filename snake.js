@@ -117,5 +117,84 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
+// **Dodanie obsługi przycisków ekranowych**
+document.getElementById('left').addEventListener('click', function () {
+    if (snake.dx === 0) {
+        snake.dx = -grid;
+        snake.dy = 0;
+    }
+});
+
+document.getElementById('up').addEventListener('click', function () {
+    if (snake.dy === 0) {
+        snake.dy = -grid;
+        snake.dx = 0;
+    }
+});
+
+document.getElementById('right').addEventListener('click', function () {
+    if (snake.dx === 0) {
+        snake.dx = grid;
+        snake.dy = 0;
+    }
+});
+
+document.getElementById('down').addEventListener('click', function () {
+    if (snake.dy === 0) {
+        snake.dy = grid;
+        snake.dx = 0;
+    }
+});
+
+// **Dodanie obsługi gestów przesunięcia (swipe)**
+let touchStartX = null;
+let touchStartY = null;
+
+canvas.addEventListener('touchstart', function (e) {
+    const touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+}, false);
+
+canvas.addEventListener('touchmove', function (e) {
+    e.preventDefault(); // Zapobiega przewijaniu strony podczas przesuwania palcem po ekranie
+}, false);
+
+canvas.addEventListener('touchend', function (e) {
+    const touch = e.changedTouches[0];
+    const touchEndX = touch.clientX;
+    const touchEndY = touch.clientY;
+
+    const dx = touchEndX - touchStartX;
+    const dy = touchEndY - touchStartY;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+        // Przesunięcie poziome
+        if (dx > 0 && snake.dx === 0) {
+            // Przesunięcie w prawo
+            snake.dx = grid;
+            snake.dy = 0;
+        } else if (dx < 0 && snake.dx === 0) {
+            // Przesunięcie w lewo
+            snake.dx = -grid;
+            snake.dy = 0;
+        }
+    } else {
+        // Przesunięcie pionowe
+        if (dy > 0 && snake.dy === 0) {
+            // Przesunięcie w dół
+            snake.dy = grid;
+            snake.dx = 0;
+        } else if (dy < 0 && snake.dy === 0) {
+            // Przesunięcie w górę
+            snake.dy = -grid;
+            snake.dx = 0;
+        }
+    }
+
+    touchStartX = null;
+    touchStartY = null;
+}, false);
+
 // Uruchomienie pętli gry
 requestAnimationFrame(loop);
