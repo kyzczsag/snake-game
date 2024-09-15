@@ -9,10 +9,45 @@
             display: block;
             margin: 0 auto;
         }
+        /* Stylizacja przycisków */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .button-row {
+            display: flex;
+        }
+        .button {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            font-size: 24px;
+            text-align: center;
+            line-height: 60px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
     <canvas id="game" width="400" height="400"></canvas>
+    <!-- Kontrolki dotykowe -->
+    <div class="controls">
+        <div class="button-row">
+            <button class="button" id="up">▲</button>
+        </div>
+        <div class="button-row">
+            <button class="button" id="left">◀</button>
+            <button class="button" id="down">▼</button>
+            <button class="button" id="right">▶</button>
+        </div>
+    </div>
     <script src="snake.js"></script>
 </body>
 </html>
+
