@@ -1,12 +1,17 @@
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
 
-let grid = 16;
+// Dostosowanie rozmiaru canvas do ekranu iPhone 12
+canvas.width = Math.min(window.innerWidth, 390); // Szerokość ekranu iPhone 12 w pikselach CSS
+canvas.height = canvas.width; // Ustawiamy wysokość równą szerokości dla kwadratowego pola gry
+
+let grid = canvas.width / 25; // Skalowanie siatki w zależności od rozmiaru canvas
 let count = 0;
+let score = 0;
 
 let snake = {
-    x: 160,
-    y: 160,
+    x: canvas.width / 2,
+    y: canvas.height / 2,
     dx: grid, // kierunek poziomy
     dy: 0,    // kierunek pionowy
     cells: [], // segmenty węża
@@ -14,18 +19,39 @@ let snake = {
 };
 
 let apple = {
-    x: 320,
-    y: 320
+    x: getRandomInt(0, 25) * grid,
+    y: getRandomInt(0, 25) * grid
 };
+
+// Ładowanie dźwięków
+const eatSound = new Audio('eat.mp3');
+const dieSound = new Audio('die.mp3');
 
 // Funkcja losująca liczby całkowite
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+// Funkcja resetująca grę
+function resetGame() {
+    snake.x = canvas.width / 2;
+    snake.y = canvas.height / 2;
+    snake.cells = [];
+    snake.maxCells = 4;
+    snake.dx = grid;
+    snake.dy = 0;
+    score = 0;
+    document.getElementById('score').innerHTML = 'Wynik: ' + score;
+    apple.x = getRandomInt(0, 25) * grid;
+    apple.y = getRandomInt(0, 25) * grid;
+    document.getElementById('message').innerHTML = '';
+    document.getElementById('restartButton').style.display = 'none';
+    requestAnimationFrame(loop);
+}
+
 // Główna pętla gry
 function loop() {
-    requestAnimationFrame(loop);
+    requestId = requestAnimationFrame(loop);
 
     if (++count < 4) {
         return;
@@ -71,6 +97,10 @@ function loop() {
         // Sprawdzenie czy wąż zjadł jabłko
         if (cell.x === apple.x && cell.y === apple.y) {
             snake.maxCells++;
+            score++;
+            document.getElementById('score').innerHTML = 'Wynik: ' + score;
+            // Odtwarzanie dźwięku zjedzenia
+            eatSound.play();
             apple.x = getRandomInt(0, 25) * grid;
             apple.y = getRandomInt(0, 25) * grid;
         }
@@ -78,16 +108,16 @@ function loop() {
         // Sprawdzenie kolizji z samym sobą
         for (let i = index + 1; i < snake.cells.length; i++) {
             if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-                // Restart gry
-                snake.x = 160;
-                snake.y = 160;
-                snake.cells = [];
-                snake.maxCells = 4;
-                snake.dx = grid;
-                snake.dy = 0;
+                // Odtwarzanie dźwięku śmierci
+                dieSound.play();
 
-                apple.x = getRandomInt(0, 25) * grid;
-                apple.y = getRandomInt(0, 25) * grid;
+                // Wyświetlenie komunikatu i przycisku restartu
+                document.getElementById('message').innerHTML = 'Haha!';
+                document.getElementById('restartButton').style.display = 'block';
+
+                // Zatrzymanie pętli gry
+                cancelAnimationFrame(requestId);
+                return;
             }
         }
     });
@@ -112,35 +142,6 @@ document.addEventListener('keydown', function (e) {
     }
     // Dół
     else if (e.keyCode === 40 && snake.dy === 0) {
-        snake.dy = grid;
-        snake.dx = 0;
-    }
-});
-
-// **Dodanie obsługi przycisków ekranowych**
-document.getElementById('left').addEventListener('click', function () {
-    if (snake.dx === 0) {
-        snake.dx = -grid;
-        snake.dy = 0;
-    }
-});
-
-document.getElementById('up').addEventListener('click', function () {
-    if (snake.dy === 0) {
-        snake.dy = -grid;
-        snake.dx = 0;
-    }
-});
-
-document.getElementById('right').addEventListener('click', function () {
-    if (snake.dx === 0) {
-        snake.dx = grid;
-        snake.dy = 0;
-    }
-});
-
-document.getElementById('down').addEventListener('click', function () {
-    if (snake.dy === 0) {
         snake.dy = grid;
         snake.dx = 0;
     }
@@ -196,5 +197,10 @@ canvas.addEventListener('touchend', function (e) {
     touchStartY = null;
 }, false);
 
+// Obsługa przycisku "Zagraj ponownie"
+document.getElementById('restartButton').addEventListener('click', function () {
+    resetGame();
+});
+
 // Uruchomienie pętli gry
-requestAnimationFrame(loop);
+let requestId = requestAnimationFrame(loop);
