@@ -2,52 +2,54 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Gra Snake</title>
+    <title>Wąż Gaszczyka</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+        h1 {
+            margin-top: 20px;
+        }
         canvas {
             background: #000;
             display: block;
             margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
-        /* Stylizacja przycisków */
-        .controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        #score {
+            font-size: 24px;
             margin-top: 10px;
         }
-        .button-row {
-            display: flex;
+        #message {
+            font-size: 36px;
+            margin-top: 20px;
+            color: red;
         }
-        .button {
-            width: 60px;
-            height: 60px;
-            margin: 5px;
-            font-size: 24px;
-            text-align: center;
-            line-height: 60px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            user-select: none;
+        #restartButton {
+            display: none;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+        #instructions {
+            margin-top: 20px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <canvas id="game" width="400" height="400"></canvas>
-    <!-- Kontrolki dotykowe -->
-    <div class="controls">
-        <div class="button-row">
-            <button class="button" id="up">▲</button>
-        </div>
-        <div class="button-row">
-            <button class="button" id="left">◀</button>
-            <button class="button" id="down">▼</button>
-            <button class="button" id="right">▶</button>
-        </div>
-    </div>
+    <h1>Wąż Gaszczyka</h1>
+    <canvas id="game"></canvas>
+    <div id="score">Wynik: 0</div>
+    <div id="message"></div>
+    <button id="restartButton">Zagraj ponownie</button>
+    <div id="instructions">Przesuwaj palcem aby sterować</div>
     <script src="snake.js"></script>
 </body>
 </html>
-
